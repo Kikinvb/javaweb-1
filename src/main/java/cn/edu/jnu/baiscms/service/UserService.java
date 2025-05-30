@@ -1,5 +1,5 @@
 package cn.edu.jnu.baiscms.service;
-import cn.edu.jnu.baiscms.common.Page;
+
 import cn.edu.jnu.baiscms.entity.User;
 
 import java.util.List;
@@ -49,5 +49,9 @@ public interface UserService {
      * @param name
      * @return
      */
-    public Page<User> selectByPage(Integer pageNum, Integer pageSize, String username, String name);
+    public Map<String, Object> selectByPage(Integer pageNum, Integer pageSize, String username, String name);
+
+    public User login(User user);
+
+    public User register(User user);
 }

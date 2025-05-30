@@ -1,7 +1,7 @@
 package cn.edu.jnu.baiscms.service.impl;
-import cn.edu.jnu.baiscms.common.Page;
-import cn.edu.jnu.baiscms.common.Page;
+
 import cn.edu.jnu.baiscms.entity.User;
+import cn.edu.jnu.baiscms.exception.ServiceException;
 import cn.edu.jnu.baiscms.mapper.UserMapper;
 import cn.edu.jnu.baiscms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> selectByPage(Integer pageNum, Integer pageSize, String username, String name) {
-        Page<User> page = new Page<>();
+    public Map<String, Object> selectByPage(Integer pageNum, Integer pageSize, String username, String name) {
+        Map<String, Object> map = new HashMap<>();
 
         int skipNum = (pageNum - 1) * pageSize;
 
@@ -70,11 +70,40 @@ public class UserServiceImpl implements UserService {
         // 总条数
         Integer total = userMapper.selectCount(username, name);
 
-//        map.put("list", users);
-//        map.put("total", total);
+        map.put("list", users);
+        map.put("total", total);
 
-        page.setList(users);
-        page.setTotal(total);
-        return page;
+        return map;
+    }
+
+    @Override
+    public User login(User user) {
+        User dbUser = userMapper.selectByUsername(user.getUsername());
+
+        // 用户名不存在
+        if(dbUser==null){
+            throw new ServiceException("用户名或密码错误");
+        }
+
+        // 密码不正确
+        if(!dbUser.getPassword().equals(user.getPassword())){
+            throw new ServiceException("用户名或密码错误");
+        }
+
+        return dbUser;
+    }
+
+    @Override
+    public User register(User user) {
+        User dbUser = userMapper.selectByUsername(user.getUsername());
+
+        if(dbUser!=null){
+            throw new ServiceException("用户名已存在");
+        }
+
+        user.setName(user.getUsername());
+        userMapper.insertUser(user);
+
+        return user;
     }
 }

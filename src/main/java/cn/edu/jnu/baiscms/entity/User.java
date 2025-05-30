@@ -1,15 +1,10 @@
 package cn.edu.jnu.baiscms.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class User {
     private Integer id;
     private String username;
@@ -19,4 +14,7 @@ public class User {
     private String email;
     private String address;
     private String avatar;
+
+    private String token;
+
 }

@@ -1,6 +1,5 @@
 package cn.edu.jnu.baiscms.controller;
 
-import cn.edu.jnu.baiscms.common.Page;
 import cn.edu.jnu.baiscms.common.Result;
 import cn.edu.jnu.baiscms.entity.User;
 import cn.edu.jnu.baiscms.service.UserService;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -67,28 +67,25 @@ public class UserController {
 
         return Result.success(user);
     }
-//多条件查询
+
     @GetMapping("/selectbymore")
     public Result selectByMore(@RequestParam String username, @RequestParam String name){
         List<User> users = userService.selectByMore(username, name);
 
         return Result.success(users);
     }
-//模糊查询
+
     @GetMapping("/selectlike")
     public Result selectLike(@RequestParam String username, @RequestParam String name){
         List<User> users = userService.selectLike(username,name);
 
         return Result.success(users);
     }
-//分页模糊查询
-    @GetMapping("/selectByPage")
-    public Result selectByPage(@RequestParam Integer pageNum,
-                               @RequestParam Integer pageSize,
-                               @RequestParam String username,
-                               @RequestParam String name){
-//        Map<String, Object> result = userService.selectByPage(pageNum, pageSize, username, name);
-        Page<User> result = userService.selectByPage(pageNum,pageSize,username,name);
-        return Result.success(result);
+
+    @GetMapping("/selectpage")
+    public Result selectPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String username, @RequestParam String name){
+        Map<String, Object> map = userService.selectByPage(pageNum, pageSize, username, name);
+
+        return Result.success(map);
     }
 }

@@ -33,4 +33,7 @@ public interface UserMapper {
 
     @Select("select count(id) from user where username like concat('%', #{username}, '%') and name like concat('%', #{name}, '%')")
     public Integer selectCount(String username, String name);
+
+    @Select("select * from user where username=#{username}")
+    public User selectByUsername(String username);
 }
